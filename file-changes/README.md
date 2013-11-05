@@ -34,3 +34,4 @@ Files:
      e.g. Google spreadsheets for further analysis
 - saved-n,a.json: Filter specification for saved-session, Nightly/Aurora
 - addon-totals-mr.py: Like addon-change-mr.py, but totalled by addonID rather than broken down by appName / version / OS
+- change-perf-mr.py: Map/reduce to extract both file changes and bootstrap method performance
