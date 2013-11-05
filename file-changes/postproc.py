@@ -6,7 +6,6 @@ import sys
 import csv
 from collections import Counter, defaultdict
 
-noDetails = 0
 badEntries = 0
 
 # Load Add-on ID => Name mapping data
@@ -44,27 +43,27 @@ modFileSet = defaultdict(set)
 
 for line in fileinput.input():
   try:
-    appName, appVersion, day, platform, addonID, data = line.split("\t", 5)
-    if appName == "NO DETAILS":
-      noDetails += appVersion
-    else:
-      details = eval(data)
-      if addonID == '{972ce4c6-7e08-4474-a285-3208198ce6fd}':
-        # Skip the default theme, it shows as modified in place on Nightly updates
-        continue
-      addonSeen[addonID] += details['seen']
-      addonUnpacked[addonID] += details['unpacked']
-      modifiedXPI[addonID] += details['modifiedXPI']
-      if details['modifiedFile'] > 0:
-        modifiedFile[addonID] += details['modifiedFile']
-        modFileSet[addonID] |= details['modFileSet']
-      modifiedInstallRDF[addonID] += details['modifiedInstallRDF']
+    if line.startswith("NO DETAILS"):
+      print line
+      continue
+    appName, appVersion, platform, addonID, data = line.split("\t", 5)
+    details = eval(data)
+    if addonID == '{972ce4c6-7e08-4474-a285-3208198ce6fd}':
+      # Skip the default theme, it shows as modified in place on Nightly updates
+      continue
+    addonSeen[addonID] += details['seen']
+    addonUnpacked[addonID] += details['unpacked']
+    modifiedXPI[addonID] += details['modifiedXPI']
+    if details['modifiedFile'] > 0:
+      modifiedFile[addonID] += details['modifiedFile']
+      modFileSet[addonID] |= details['modFileSet']
+    modifiedInstallRDF[addonID] += details['modifiedInstallRDF']
   except:
     print "Unexpected error:", sys.exc_info()
     print line
     badEntries += 1
 
-print "noDetails =", noDetails, " badEntries = ", badEntries
+print "badEntries = ", badEntries
 
 print
 print "Top modifiedXPI:"
