@@ -15,13 +15,19 @@ Setup:
 ======
 
 For debug runs:
+
 1. create an EC2 instance at http://telemetry-dash.mozilla.org and SSH in
 2. sudo apt-get install git
 3. git clone https://github.com/mozilla/telemetry-server.git
 4. (cd telemetry-server; git checkout mapreduce_without_aws_credentials)
 4. git clone https://github.com/irvingreid/addon-telemetry.git
+5. sudo apt-get install python-setuptools
 5. (git clone https://github.com/mreid-moz/s3funnel.git; cd s3funnel; sudo python setup.py install)
-6. mkdir -p ~/work/cache
+6. sudo mkdir /mnt/work
+7. sudo chown ubuntu.ubuntu /mnt/work
+8. mkdir /mnt/work/cache
+9. cd ~/telemetry-server
+10. python -m mapreduce/job -o ../changes.out -f ../addon-telemetry/file-changes/saved-n,a.json -w /mnt/work -d /mnt/work/cache -b telemetry-published-v1 ../addon-telemetry/file-changes/addon-change-mr.py
 
 Files:
 ======
