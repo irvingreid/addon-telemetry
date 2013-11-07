@@ -7,7 +7,7 @@ Example command line
 ====================
 
     $ cd telemetry-server
-    $ python -m mapreduce/job -o ../changes.out -f ../addon-telemetry/file-changes/saved-n,a.json -w ~/work -d ~/work/cache -b telemetry-published-v1 ../addon-telemetry/file-changes/addon-change-mr.py
+    $ python -m mapreduce.job -o ../changes.out -f ../addon-telemetry/file-changes/saved-n,a.json -w ~/work -d ~/work/cache -b telemetry-published-v1 ../addon-telemetry/file-changes/addon-change-mr.py
     $ cd ../addon-telemetry
     $ python file-changes/postproc.py ../changes.out | less
 
@@ -27,7 +27,7 @@ For debug runs:
 7. sudo chown ubuntu.ubuntu /mnt/work
 8. mkdir /mnt/work/cache
 9. cd ~/telemetry-server
-10. python -m mapreduce/job -o ../changes.out -f ../addon-telemetry/file-changes/saved-n,a.json -w /mnt/work -d /mnt/work/cache -b telemetry-published-v1 --num-mappers 12 ../addon-telemetry/file-changes/addon-change-mr.py
+10. python -m mapreduce.job -o /mnt/work/changes.out -f ../addon-telemetry/file-changes/saved-n-20131106.json -w /mnt/work -d /mnt/work/cache -b telemetry-published-v1 --num-mappers 8 --num-reducers 8 ../addon-telemetry/file-changes/addon-change-mr.py
 
 Files:
 ======
