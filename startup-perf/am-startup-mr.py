@@ -23,6 +23,13 @@ def map(k, d, v, cx):
       return
     s = j['simpleMeasurements']
     if not 'AMI_startup_end' in s:
+      print "no AMI_startup_end", k, d, json.dumps(s)
+      return
+    if not 'XPI_startup_end' in s:
+      print "no XPI_startup_end", k, d, json.dumps(s)
+      return
+    if not 'XPI_bootstrap_addons_end' in s:
+      print "no XPI_bootstrap_addons_end", k, d, json.dumps(s)
       return
     amiTotal = s['AMI_startup_end'] - s['AMI_startup_begin']
     xpiTotal = s['XPI_startup_end'] - s['XPI_startup_begin']
