@@ -29,6 +29,13 @@ For debug runs:
 9. cd ~/telemetry-server
 10. python -m mapreduce.job -o /mnt/work/changes.out -f ../addon-telemetry/file-changes/saved-n-20131106.json -w /mnt/work -d /mnt/work/cache -b telemetry-published-v1 --num-mappers 8 --num-reducers 8 ../addon-telemetry/file-changes/addon-change-mr.py
 
+Python LZMA:
+============
+
+    sudo apt-get install python-dev
+    sudo apt-get install liblzma-dev
+    sudo pip install backports.lzma
+    
 Files:
 ======
 
@@ -41,3 +48,4 @@ Files:
 - saved-n,a.json: Filter specification for saved-session, Nightly/Aurora
 - addon-totals-mr.py: Like addon-change-mr.py, but totalled by addonID rather than broken down by appName / version / OS
 - change-perf-mr.py: Map/reduce to extract both file changes and bootstrap method performance
+- xpi-startup-mr.py: M/R to extract reasons why the XPI database was loaded at startup time
