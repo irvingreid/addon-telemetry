@@ -58,9 +58,15 @@ csvOut.writerow(['appName', 'appVersion', 'platform', 'addonName', 'addonID']
                 + titles)
 
 for line in fileinput.input():
-    appName, appVersion, platform, addonID, data = line.split("\t", 5)
+    try:
+      appName, appVersion, platform, addonID, data = line.split("\t", 5)
+    except:
+      pass
     key = [appName, appVersion, platform, addonName(addonID), addonID]
     details = eval(data)
     for measure in measures:
-      key.extend(getPercentiles(details.get(measure)))
-    csvOut.writerow(key)
+      percentiles = getPercentiles(details.get(measure))
+      key.extend(percentiles)
+    # filter out little used add-ons
+    if key[5] >= 20:
+      csvOut.writerow(key)
