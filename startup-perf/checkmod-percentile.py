@@ -1,5 +1,5 @@
 #! /usr/local/bin/python
-# post-process bootstrap.py output to rough percentiles
+# post-process output of checkmod-mr.py to rough percentiles
 
 import fileinput
 import sys
@@ -45,28 +45,35 @@ def getPercentiles(bucketList):
       while accum < (points * percentile / 100):
         bucket = b.next()
         accum += bucketList[bucket]
-      result.append(bucket)
-    result.append(buckets[-1])
+      result.append(bucket * 10)
+    result.append(buckets[-1] * 10)
     return result
 
-measures = ['startup_MS', 'shutdown_MS', 'install_MS', 'uninstall_MS']
 per = ['points', 50, 75, 90, 'max']
-titles = [m + "_" + str(p) for m in measures for p in per]
 
 csvOut = csv.writer(sys.stdout)
-csvOut.writerow(['appName', 'appVersion', 'platform', 'addonName', 'addonID']
-                + titles)
+csvOut.writerow(['appName', 'platform', 'addonName', 'addonID']
+                + per)
+
+# Accumulate overall histograms for each platform
+overall = defaultdict(Counter)
 
 for line in fileinput.input():
     try:
-      appName, appVersion, platform, addonID, data = line.split("\t", 5)
+      appName, platform, addonID, data = line.split("\t", 4)
     except:
       pass
-    key = [appName, appVersion, platform, addonName(addonID), addonID]
+    key = [appName, platform, addonName(addonID), addonID]
     details = eval(data)
-    for measure in measures:
-      percentiles = getPercentiles(details.get(measure))
-      key.extend(percentiles)
+    overall[platform].update(details)
+    percentiles = getPercentiles(details)
+    key.extend(percentiles)
+
     # filter out little used add-ons
-    if key[5] >= 20:
+    if key[4] >= 100:
       csvOut.writerow(key)
+
+for [platform, hist] in overall.iteritems():
+  key = ['NA', platform, 'TOTAL', 'TOTAL']
+  key.extend(getPercentiles(hist))
+  csvOut.writerow(key)
