@@ -25,6 +25,8 @@ def map(k, d, v, cx):
     if not 'addonManager' in s:
       cx.write("\t".join([d[1], os, update, "NO_AM"]), 1)
       return
+    if 'XPIDB_startup_state_badCompare' in s:
+      cx.write("\t".join([d[1], os, update, "BAD_COMPARE"]), 1)
     reasons = ','.join(s['addonManager'].get("XPIDB_startup_load_reasons", ['NONE']))
     key = "\t".join([d[1], os, update, reasons])
     cx.write(key, 1)

@@ -10,14 +10,14 @@ import math
 # Magic number 0.34 gives us a reasonable spread of buckets
 # for things measured in milliseconds
 def logBucket(v, spread = 0.34):
-  if v == 0:
-    return 0
+  if v < 1:
+    return v
   return int(math.exp(int(math.log(v) / spread) * spread))
 
 # d is filter criteria:
 # [reason, appName, appUpdateChannel, appVersion, appBuildID, submission_date]
 # Output of map pass is
-# "appName \t appVersion \t OS \t addonID =>
+# "appName \t appVersion \t OS \t addonID \t addonName =>
 #    {*_MS: {bucket: count, ...}, ...}
 def map(k, d, v, cx):
     j = json.loads(v)
@@ -37,12 +37,20 @@ def map(k, d, v, cx):
           result[measure] = {logBucket(val): 1}
           send = True
         if measure == 'scan_items':
-          // counting individual files, so use narrower buckets
+          # counting individual files, so use narrower buckets
           result[measure] = {logBucket(val, 0.2): 1}
           send = True
+      addonName = None
+      if 'name' in details:
+        addonName = details['name']
+      if addonName is None:
+        addonName = "?"
       if send:
-        cx.write(key + "\t" + addonID,
-          {measure: dict(hist) for measure, hist in result.iteritems()})
+        try:
+          cx.write(key + "\t" + addonID + "\t" + addonName,
+            {measure: dict(hist) for measure, hist in result.iteritems()})
+	except TypeError:
+	  print key, addonName, details
 
 def reduce(k, v, cx):
     result = defaultdict(Counter);

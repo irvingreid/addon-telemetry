@@ -49,7 +49,7 @@ def getPercentiles(bucketList):
     result.append(buckets[-1])
     return result
 
-measures = ['startup_MS', 'shutdown_MS', 'install_MS', 'uninstall_MS']
+measures = ['scan_items', 'scan_MS', 'startup_MS', 'shutdown_MS', 'install_MS', 'uninstall_MS']
 per = ['points', 50, 75, 90, 'max']
 titles = [m + "_" + str(p) for m in measures for p in per]
 
@@ -59,14 +59,16 @@ csvOut.writerow(['appName', 'appVersion', 'platform', 'addonName', 'addonID']
 
 for line in fileinput.input():
     try:
-      appName, appVersion, platform, addonID, data = line.split("\t", 5)
+      appName, appVersion, platform, addonID, addonName, data = line.split("\t", 6)
     except:
       pass
-    key = [appName, appVersion, platform, addonName(addonID), addonID]
+    if addonName == "?":
+      addonName = addonID
+    key = [appName, appVersion, platform, addonName, addonID]
     details = eval(data)
     for measure in measures:
       percentiles = getPercentiles(details.get(measure))
       key.extend(percentiles)
     # filter out little used add-ons
-    if key[5] >= 20:
+    if key[5] >= 50:
       csvOut.writerow(key)
