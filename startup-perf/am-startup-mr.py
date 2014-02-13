@@ -22,6 +22,8 @@ def map(k, d, v, cx):
     if not 'simpleMeasurements' in j:
       return
     s = j['simpleMeasurements']
+    if 'XPIDB_startup_state_badCompare' in s:
+      print "XPIDB_startup_state_badCompare", k, d, json.dumps(s)
     if not 'AMI_startup_end' in s:
       print "no AMI_startup_end", k, d, json.dumps(s)
       return
