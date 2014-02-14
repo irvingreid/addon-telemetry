@@ -1,7 +1,7 @@
 #! /usr/local/bin/python
 # Exception telemetry from bug 952543
 
-import json
+import simplejson as json
 from collections import defaultdict, Counter
 
 # d is filter criteria:
@@ -18,7 +18,7 @@ def map(k, d, v, cx):
         return
     a = s['addonManager']
     if 'exception' in a:
-        cx.write(a['exception'], 1)
+        cx.write(json.dumps(a['exception']), 1)
 
 def reduce(k, v, cx):
     cx.write(k, sum(v))
