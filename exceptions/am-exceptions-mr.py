@@ -19,9 +19,15 @@ def map(k, d, v, cx):
     if not 'AMI_startup_end' in s:
         cx.write("No AMI_startup_end", 1)
         failure = "AMI  "
+    if not 'XPI_bootstrap_addons_begin' in s:
+        cx.write("No XPI_bootstrap_addons_begin", 1)
+        failure = "boot "
     if not 'XPI_bootstrap_addons_end' in s:
         cx.write("No XPI_bootstrap_addons_end", 1)
         failure = "BOOT "
+    if not 'XPI_startup_begin' in s:
+        cx.write("No XPI_startup_begin", 1)
+        failure = "xpi  "
     if not 'XPI_startup_end' in s:
         cx.write("No XPI_startup_end", 1)
         failure = "XPI  "
@@ -30,6 +36,9 @@ def map(k, d, v, cx):
     a = s['addonManager']
     if 'exception' in a:
         cx.write(failure + json.dumps(a['exception']), 1)
+    elif failure != "NONE ":
+        # Failure but no exception logged!
+        cx.write("z" + failure + json.dumps([d, v]), 1)
 
 def reduce(k, v, cx):
     cx.write(k, sum(v))
