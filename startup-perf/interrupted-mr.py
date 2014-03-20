@@ -26,19 +26,20 @@ def map(k, d, v, cx):
         if 'appChanged' in r:
             if 'startupInterrupted' in s and s['startupInterrupted'] == 1:
                 cx.write("YES " + appVersion, 1)
-            else
+            else:
                 # Check to see if all add-ons are in the app-global location
+               allAppGlobal = True
                 if 'addonDetails' in j and 'XPI' in j['addonDetails']:
                     ad = j['addonDetails']['XPI']
-                    allAppGlobal = True
-                    for v in ad.values():
-                        if v.get('location', 'app-global') != 'app-global':
-                            allAppGlobal = False
-                            break
+                    for addon in ad.values():
+                        if 'location' in addon:
+                            if addon['location'] != 'app-global':
+                                allAppGlobal = False
+                                break
                 if allAppGlobal:
                     # we didn't present UI because all add-ons are app-global
                     cx.write("AG  " + appVersion, 1)
-                else
+                else:
                     # upgrade UI disabled by pref
                     cx.write("NO  " + appVersion, 1)
         if 'hasPendingChanges' in r:

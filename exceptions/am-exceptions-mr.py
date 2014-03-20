@@ -13,25 +13,30 @@ def map(k, d, v, cx):
     j = json.loads(v)
 
     if not 'simpleMeasurements' in j:
+        cx.write("No simpleMeasurements", 1)
         return
     failure = "NONE "
     s = j['simpleMeasurements']
-    if not 'AMI_startup_end' in s:
-        cx.write("No AMI_startup_end", 1)
-        failure = "AMI  "
-    if not 'XPI_bootstrap_addons_begin' in s:
-        cx.write("No XPI_bootstrap_addons_begin", 1)
-        failure = "boot "
-    if not 'XPI_bootstrap_addons_end' in s:
-        cx.write("No XPI_bootstrap_addons_end", 1)
-        failure = "BOOT "
-    if not 'XPI_startup_begin' in s:
+    if not 'AMI_startup_begin' in s:
+        cx.write("No AMI_startup_begin", 1)
+        failure = "ami  "
+    elif not 'XPI_startup_begin' in s:
         cx.write("No XPI_startup_begin", 1)
         failure = "xpi  "
-    if not 'XPI_startup_end' in s:
+    elif not 'XPI_bootstrap_addons_begin' in s:
+        cx.write("No XPI_bootstrap_addons_begin", 1)
+        failure = "boot "
+    elif not 'XPI_bootstrap_addons_end' in s:
+        cx.write("No XPI_bootstrap_addons_end", 1)
+        failure = "BOOT "
+    elif not 'XPI_startup_end' in s:
         cx.write("No XPI_startup_end", 1)
         failure = "XPI  "
+    elif not 'AMI_startup_end' in s:
+        cx.write("No AMI_startup_end", 1)
+        failure = "AMI  "
     if not 'addonManager' in s:
+        cx.write("No addonManager", 1)
         return
     a = s['addonManager']
     if 'exception' in a:
