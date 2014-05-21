@@ -44,6 +44,8 @@ def map(k, d, v, cx):
     elif failure != "NONE ":
         # Failure but no exception logged!
         cx.write("z" + failure + json.dumps([d, v]), 1)
+    if 'default_providers' in a:
+        cx.write("PROVIDERS_" + a['default_providers'], 1)
 
 def reduce(k, v, cx):
     cx.write(k, sum(v))
