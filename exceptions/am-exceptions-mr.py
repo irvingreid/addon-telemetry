@@ -47,3 +47,5 @@ def map(k, d, v, cx):
 
 def reduce(k, v, cx):
     cx.write(k, sum(v))
+
+combine = reduce
