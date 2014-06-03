@@ -13,7 +13,7 @@ def getPercentiles(bucketList):
     if bucketList == None:
       return [0, 0, 0, 0, 0, 0, 0]
     points = sum(bucketList.values())
-    buckets = sorted(bucketList.keys(), key=int)
+    buckets = sorted(bucketList.keys(), key = int)
     result = [points]
     accum = 0
     b = iter(buckets)
