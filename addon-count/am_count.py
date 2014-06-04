@@ -34,11 +34,10 @@ def map(k, d, v, cx):
     active = 0
     if 'addons' in info:
         active = len(info['addons'].split(','))
-    # XXX this isn't counting total add-ons correctly, it always gets 0
     total = 0
     if 'addonDetails' in j:
-        if 'XPI Provider' in j['addonDetails']:
-            total = len(j['addonDetails']['XPI Provider'])
+        if 'XPI' in j['addonDetails']:
+            total = len(j['addonDetails']['XPI'])
 
     report(cx, appName, os, appVersion, appUpdateChannel, active, total)
 
