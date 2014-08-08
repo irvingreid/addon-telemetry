@@ -1,4 +1,6 @@
 # Extract addon compat check details from telemetry
+# appUpdate_disabled is the number of non-locked, disabled add-ons (used to decide to show dialog)
+# XPIDB_startup_disabled is the total number of disabled
 
 import simplejson as json
 import re
@@ -43,9 +45,9 @@ def map(k, d, v, cx):
         metaStale = (metadataAge_D >= 2)
     else:
         metadataAge_D = 'none'
-        metaStale = True
+        metaStale = False
 
-    someDisabled = (a.get('XPIDB_startup_disabled', 0) > 0)
+    someDisabled = (a.get('appUpdate_disabled', 0) > 0)
 
     interrupted = s.get('startupInterrupted', 0)
     allAppGlobal = True
