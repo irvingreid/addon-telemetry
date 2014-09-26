@@ -7,4 +7,4 @@
 # d => v
 def map(k, d, v, cx):
     if v.find("mozIGeckoMediaPluginService") != -1:
-        cx.write(d, v)
+        cx.write(str(d), v)

@@ -19,7 +19,7 @@
     },
     {
       "field_name": "appBuildID",
-      "allowed_values": *
+      "allowed_values": "*"
     },
     {
       "field_name": "submission_date",
