@@ -10,7 +10,8 @@ measures = [
   'XPIDB_lateOpen_forInternalName',
   'XPIDB_lateOpen_addMetadata',
   'XPIDB_lateOpen_updateActive',
-  'XPIDB_lateOpen_writeList']
+  'XPIDB_lateOpen_writeList',
+  'XPIDB_late_stack']
 
 section_regex = re.compile(r',"(?:info|addonDetails|slowSQL|ver|log|fileIOReports|histograms|lateWrites|addonHistograms|UIMeasurements|threadHangStats|simpleMeasurements|chromeHangs|slowSQLStartup)":|}$')
 # Extract a top level section out of the telemetry JSON packet by guessing at string boundaries
@@ -40,6 +41,7 @@ OS_regex = re.compile(r'"OS":"([^"]+)"')
 # [reason, appName, appUpdateChannel, appVersion, appBuildID, submission_date]
 # Output of map pass is
 # "(app, platform, measure, phase) => count"
+# "(app, platform, XPI_late_stack, stack) => count"
 def map(k, d, v, cx):
     reason, appName, appUpdateChannel, appVersion, appBuildID, submission_date = d
 
